@@ -1,5 +1,5 @@
 FROM amazoncorretto:21
 WORKDIR /app
-COPY target/BankingSystem-0.0.1-SNAPSHOT.jar app.jar
+COPY . .
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
