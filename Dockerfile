@@ -1,16 +1,14 @@
-# Use Amazon Corretto JDK as base image
-FROM amazoncorretto:21
-
-# Set working directory inside container
+# Stage 1: Build the JAR
+FROM maven:3.9.6-amazoncorretto-21 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the built JAR file into the container
-# (adjust target/*.jar to match your actual build output)
-COPY target/BankingSystem-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the application port
+# Stage 2: Run the JAR
+FROM amazoncorretto:21
+WORKDIR /app
+COPY --from=build /app/target/BankingSystem-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
